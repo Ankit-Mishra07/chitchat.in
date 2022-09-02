@@ -47,7 +47,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, password, username } = req.body;
         // check if the email address provided already exist 
-        let user = yield models_1.Users.findOne({ email }).select("-password");
+        let user = yield models_1.Users.findOne({ email });
         // if it does not exist then throw an error 
         if (!user)
             return res.status(404).json({ message: "Please provide correct credentials" });
@@ -104,7 +104,7 @@ const allUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             ],
         }
         : {};
-    const users = yield models_1.Users.find(keyword).find({ _id: { $ne: req.body.user._id } });
+    const users = yield models_1.Users.find(keyword).find({ _id: { $ne: req.body.user.user._id } }).lean().exec();
     res.send(users);
 });
 exports.allUsers = allUsers;

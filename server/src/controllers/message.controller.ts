@@ -4,12 +4,12 @@ import { Request,Response } from "express";
 const allMessages = async (req:Request, res:Response) => {
   try {
     const messages = await Messages.find({ chat: req.params.chatId })
-      .populate("sender", "name profile_avatar_url email")
+      .populate("sender", "username profile_avatar_url email")
       .populate("chat");
     res.json(messages);
   } catch (error:any) {
-    res.status(400);
-    throw new Error(error.message);
+    console.log(error.message);
+    return res.status(400).send({message:"Internal Server error"});
   }
 }
 
@@ -22,7 +22,7 @@ const sendMessage = async (req:Request, res:Response) => {
   }
 
   var newMessage = {
-    sender: req.body.user._id,
+    sender: req.body.user.user._id,
     content: content,
     chat: chatId,
   };
@@ -30,19 +30,19 @@ const sendMessage = async (req:Request, res:Response) => {
   try {
     var message = await Messages.create(newMessage);
 
-    message = await message.populate("sender", "name profile_avatar_url");
+    message = await message.populate("sender", "username profile_avatar_url");
     message = await message.populate("chat");
     const data = await Users.populate(message, {
       path: "chat.users",
-      select: "name profile_avatar_url email",
+      select: "username profile_avatar_url email",
     });
 
     await Chats.findByIdAndUpdate(req.body.chatId, { latestMessage: message });
 
-    res.json(message);
+    return res.status(200).json(message);
   } catch (error:any) {
-    res.status(400);
-    throw new Error(error.message);
+    console.log(error.message);
+    return res.status(400).send({message:"Internal Server error"});
   }
 }
 

@@ -36,7 +36,7 @@ export const Input = styled.input`
   background: none;
   border: none;
   padding: 8px 12px;
-  font-size: 16px;
+  font-size: 18px;
   transition: all 0.2s ease-in-out;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
   box-sizing: border-box;
@@ -103,3 +103,4 @@ export const MainBox = styled.div`
   width: 100%;
   height: 100vh;
 `;
+

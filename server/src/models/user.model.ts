@@ -1,8 +1,8 @@
 import bcrypt from "bcrypt";
 import { Schema, model } from "mongoose";
 interface IUser {
+    _id:Schema.Types.ObjectId;
     username: string;
-    name: string;
     email: string;
     password: string;
     profile_avatar_url: string;
@@ -14,7 +14,6 @@ interface IUser {
 
 const userSchema = new Schema<IUser>({
     username:{type: String,required: true,unique: true},
-    name: {type:String, required: true},
     email:{type:String, required:true, unique:true},
     password:{type:String,required:true},
     profile_avatar_url:{type: String,required:false,default:"https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"},

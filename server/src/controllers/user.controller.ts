@@ -4,7 +4,6 @@ import {Request,Response} from "express";
 import {Session} from "express-session"
 import { Users } from "../models";
 import jwt from "jsonwebtoken";
-import {IncomingHttpHeaders} from 'http';
 
 const newToken = (user:Object) => {
     return jwt.sign({ user }, `${process.env.JWT_ACCESS_KEY}`);
@@ -79,7 +78,7 @@ const allUsers = async (req:Request, res:Response) => {
         }
       : {};
   
-    const users = await Users.find(keyword).find({ _id: { $ne: req.body.user._id } });
+    const users = await Users.find(keyword).find({ _id: { $ne: req.body.user.user._id } }).lean().exec();
     res.send(users);
   };
 

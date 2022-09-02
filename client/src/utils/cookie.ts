@@ -8,3 +8,4 @@ export const getCookie = (key: string) => {
   let get = Cookies.get(key);
   return get;
 };
+

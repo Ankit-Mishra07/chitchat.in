@@ -1,15 +1,26 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import Login from "../components/Login/Login";
 import Logo from "../components/Logo/Logo";
 import Register from "../components/Register/Register";
 import { registerReq } from "../src/Fetch/Auth/POSTreq";
+import { getCookie } from "../src/utils/cookie";
 import { Box, Button, Input, MainBox } from "../styled__components/common";
 
 const Home: NextPage = () => {
   const [showRegister, setShowRegister] = useState<boolean>(true);
+
+  const router = useRouter();
+  useEffect(() => {
+    let getToken = getCookie("token");
+    if (getToken !== undefined) {
+      router.push("/home");
+    }
+  }, [router]);
+
   return (
     <MainBox>
       <Head>

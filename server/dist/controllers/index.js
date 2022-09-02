@@ -1,7 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.allUsers = exports.register = exports.login = void 0;
+exports.sendMessage = exports.allMessages = exports.renameGroup = exports.addToGroup = exports.removeFromGroup = exports.createGroupChat = exports.fetchChats = exports.accessChat = exports.allUsers = exports.register = exports.login = void 0;
 var user_controller_1 = require("./user.controller");
 Object.defineProperty(exports, "login", { enumerable: true, get: function () { return user_controller_1.login; } });
 Object.defineProperty(exports, "register", { enumerable: true, get: function () { return user_controller_1.register; } });
 Object.defineProperty(exports, "allUsers", { enumerable: true, get: function () { return user_controller_1.allUsers; } });
+var chat_controller_1 = require("./chat.controller");
+Object.defineProperty(exports, "accessChat", { enumerable: true, get: function () { return chat_controller_1.accessChat; } });
+Object.defineProperty(exports, "fetchChats", { enumerable: true, get: function () { return chat_controller_1.fetchChats; } });
+Object.defineProperty(exports, "createGroupChat", { enumerable: true, get: function () { return chat_controller_1.createGroupChat; } });
+Object.defineProperty(exports, "removeFromGroup", { enumerable: true, get: function () { return chat_controller_1.removeFromGroup; } });
+Object.defineProperty(exports, "addToGroup", { enumerable: true, get: function () { return chat_controller_1.addToGroup; } });
+Object.defineProperty(exports, "renameGroup", { enumerable: true, get: function () { return chat_controller_1.renameGroup; } });
+var message_controller_1 = require("./message.controller");
+Object.defineProperty(exports, "allMessages", { enumerable: true, get: function () { return message_controller_1.allMessages; } });
+Object.defineProperty(exports, "sendMessage", { enumerable: true, get: function () { return message_controller_1.sendMessage; } });

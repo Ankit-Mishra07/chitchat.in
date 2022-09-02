@@ -13,7 +13,7 @@ const accessChat = async (req:Request, res:Response) => {
   var isChat = await Chats.find({
     isGroupChat: false,
     $and: [
-      { users: { $elemMatch: { $eq: req.body.user._id } } },
+      { users: { $elemMatch: { $eq: req.body.user.user._id } } },
       { users: { $elemMatch: { $eq: userId } } },
     ],
   })
@@ -22,7 +22,7 @@ const accessChat = async (req:Request, res:Response) => {
 
   const chats = await Users.populate(isChat,{
     path: "latestMessage.sender",
-    select: "name profile_avatar_url email username",
+    select: "username profile_avatar_url email",
   })
 
   if (chats.length > 0) {
@@ -31,7 +31,7 @@ const accessChat = async (req:Request, res:Response) => {
     var chatData = {
       chatName: "sender",
       isGroupChat: false,
-      users: [req.body.user._id, userId],
+      users: [req.body.user.user._id, userId],
     };
 
     try {
@@ -50,7 +50,7 @@ const accessChat = async (req:Request, res:Response) => {
 
 const fetchChats = async (req:Request, res:Response) => {
   try {
-     Chats.find({ users: { $elemMatch: { $eq: req.body.user._id } } })
+     Chats.find({ users: { $elemMatch: { $eq: req.body.user.user._id } } })
       .populate("users", "-password")
       .populate("groupAdmin", "-password")
       .populate("latestMessage")
@@ -58,7 +58,7 @@ const fetchChats = async (req:Request, res:Response) => {
       .then(async (results) => {
         const data = await Users.populate(results, {
           path: "latestMessage.sender",
-          select: "name pic email",
+          select: "username profile_avatar_url email",
         });
         res.status(200).send(data);
       });
@@ -84,14 +84,14 @@ const createGroupChat = async (req:Request, res:Response) => {
       .send("More than 2 users are required to form a group chat");
   }
 
-  users.push(req.body.user._id);
+  users.push(req.body.user.user._id);
 
   try {
     const groupChat = await Chats.create({
       chatName: req.body.name,
       users: users,
       isGroupChat: true,
-      groupAdmin: req.body.user._id,
+      groupAdmin: req.body.user.user._id,
     });
 
     const fullGroupChat = await Chats.findOne({ _id: groupChat._id })
@@ -100,8 +100,8 @@ const createGroupChat = async (req:Request, res:Response) => {
 
     res.status(200).json(fullGroupChat);
   } catch (error:any) {
-    res.status(400);
-    throw new Error(error.message);
+    console.log(error.message)
+    res.status(400).send({message:"Internal Server Error"});
   }
 }
 

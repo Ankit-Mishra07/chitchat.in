@@ -1,3 +1,4 @@
+
 import { toast } from "react-toastify";
 
 type User = {
@@ -15,3 +16,4 @@ export const ValidateLogin = (form: User) => {
   }
   return true;
 };
+

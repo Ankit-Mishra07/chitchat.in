@@ -2,7 +2,8 @@ import jwt from "jsonwebtoken";
 import {Request,Response,NextFunction} from "express";
 
 const verifyToken = (token:string) => {
-        return jwt.verify(token,`${process.env.JWT_ACCESS_KEY}`)
+        return jwt.verify(token,`${process.env.JWT_ACCESS_KEY}`);
+       
 }
 
 const authenticateLogin = async (req:Request,res:Response,next:NextFunction) => {
@@ -17,9 +18,9 @@ const authenticateLogin = async (req:Request,res:Response,next:NextFunction) => 
     // else we will try to get the user from the token 
     const token = bearerToken.split(" ")[1];
   
-    let user:string | jwt.JwtPayload;
+    let user
     try {
-        user = verifyToken(token)
+        user = verifyToken(token);
     } catch (e) {
         return res.status(500).json({message: "Please provide a valid token"})
     }

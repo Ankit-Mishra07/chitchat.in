@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { MessageType } from "../../../src/utils/types";
-import { Button } from "../../../styled__components/common";
+import { MessageType, SearchedUser } from "../../../src/utils/types";
+import { Button, Text } from "../../../styled__components/common";
+import { BsThreeDotsVertical } from "react-icons/bs"
 import {
   ChatsBox,
   EmogiBtn,
@@ -13,6 +14,7 @@ import {
   RightClient,
   SenderInputBox,
   SendInput,
+  UserImage,
 } from "../../../styled__components/home";
 import { AiOutlineSend } from "react-icons/ai";
 import { BsEmojiLaughing } from "react-icons/bs";
@@ -21,13 +23,19 @@ import { io, Socket } from "socket.io-client";
 import { url } from "../../../src/utils/baseUrl";
 import { getCookie } from "../../../src/utils/cookie";
 import { toast } from "react-toastify";
-let socket: any, chatCompare: Object & { _id: string };
+import { Box } from "@mui/material";
+import { getName, getProfile } from "../../../src/utils/logic";
+import { NotifyType } from "../../../pages/home";
+let socket: any, chatCompare: any;
 type Props = {
   messages: MessageType[];
   setMessages: Function;
   click: boolean;
   setClick: Function;
-  chatId: Object & { _id: string };
+  setFetchAgain:Function;
+  chat: any;
+  notify:NotifyType;
+  setNotify:Function;
 };
 
 
@@ -36,7 +44,11 @@ const RightClientBox = ({
   setMessages,
   click,
   setClick,
-  chatId,
+  setFetchAgain,
+  chat,
+  notify,
+  setNotify
+
 }: Props) => {
   const [val, setVal] = useState<string>("");
   const [connect, setConnect] = useState<boolean>(false);
@@ -50,32 +62,51 @@ const RightClientBox = ({
   }, []);
 
   useEffect(() => {
+    const GetChatsDetailsOfSingle = async () => {
+      if (click === false) {
+        try {
+          let res = await fetch(`${url}/api/message/${chat._id}`, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${getCookie("token")}`,
+            },
+          });
+          let message = await res.json();
+          setMessages([...message]);
+          socket.emit("join chat", chat._id);
+        } catch (error: any) {
+          console.log("error", error);
+        }
+      }
+    };
+
     GetChatsDetailsOfSingle();
-    chatCompare = chatId;
-  }, [chatId]);
+    chatCompare = chat;
+  }, [chat]);
 
 
   useEffect(() => {
     socket.on(
       "message recieved",
       (newmsg: Object & { chat: { _id: string } }) => {
-        
+
         if (!chatCompare || chatCompare._id !== newmsg.chat._id) {
           // Todo Notification
-          console.log("Notify")
-          // toast.error("Notify");
+          setNotify({length:notify.messages.length+1,messages:[...notify.messages,newmsg]})
+          setFetchAgain((prev:boolean) => !prev)
         } else {
           setMessages([...messages, newmsg]);
         }
       }
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   });
 
   const POSTChatToSingle = async () => {
     fetch(`${url}/api/message`, {
       method: "POST",
       body: JSON.stringify({
-        chatId: chatId._id,
+        chatId: chat._id,
         content: val,
       }),
       headers: {
@@ -85,31 +116,13 @@ const RightClientBox = ({
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
         socket.emit("new message", res);
         setMessages([...messages, res]);
         setVal("")
       });
   };
 
-  const GetChatsDetailsOfSingle = async () => {
-    if (click === false) {
-      try {
-        let res = await fetch(`${url}/api/message/${chatId._id}`, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${getCookie("token")}`,
-          },
-        });
-        let message = await res.json();
-        setMessages([...message]);
-        socket.emit("join chat", chatId._id);
-      } catch (error: any) {
-        console.log("error", error);
-        // toast.error(error.message);
-      }
-    }
-  };
+
   return (
     <RightClient>
       {click && (
@@ -120,7 +133,18 @@ const RightClientBox = ({
 
       {!click && (
         <MainMessagesBox>
-          <ProfileBox></ProfileBox>
+          <ProfileBox>
+            <Box display={"flex"} gap={"20px"} alignItems={"center"}>
+              <UserImage src={getProfile(chat)} alt="myprofile" onClick={() => {
+                // Open a Modal with bigger user image an username 
+
+
+              }} />
+              <Text>{chat.isGroupChat?chat.chatName:getName(chat)}</Text>
+            </Box>
+
+            <BsThreeDotsVertical fontSize={"20px"} cursor={"pointer"} />
+          </ProfileBox>
           <ChatsBox>
             {messages.map((elem) => (
               <div key={elem._id} style={{ width: "100%" }}>

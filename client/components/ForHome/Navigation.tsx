@@ -1,10 +1,8 @@
-
-import Image from "next/image";
 import React, { useState } from "react";
-import { AiOutlineDown } from "react-icons/ai";
 import { BsFillBellFill } from "react-icons/bs";
-import { SearchedUser } from "../../pages/home";
+import { NotifyType, SearchedUser } from "../../pages/home";
 import { searchUserwithParam } from "../../src/Fetch/SearchUserReq/GETsearchedReg";
+import { getCookie } from "../../src/utils/cookie";
 import { Input } from "../../styled__components/common";
 import {
   Badge,
@@ -21,17 +19,27 @@ type Props = {
   searchUser: SearchedUser[];
   setSearchUser: Function;
   addUserToMyAccount: Function;
+  setNotify:Function;
+  notify: NotifyType;
 };
+
+
 const Navigation = ({
   searchUser,
   setSearchUser,
   addUserToMyAccount,
+  setNotify,
+  notify
 }: Props) => {
+
+
   const [showNav, setShowNav] = useState<boolean>(true);
   const handleHamburger = () => {
     setShowNav(!showNav);
   };
+
   let timeout: ReturnType<typeof setTimeout>;
+
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (timeout) {
       clearTimeout(timeout);
@@ -44,6 +52,7 @@ const Navigation = ({
       }
     }, 1500);
   };
+
   return (
     <Nav showNav={showNav}>
       <div>
@@ -80,17 +89,18 @@ const Navigation = ({
         <Logo />
         <div>
           <span style={{ position: "relative", cursor: "pointer" }}>
-            <BsFillBellFill style={{ fontSize: "20px", color: "#474545" }} />
-            <Badge>0</Badge>
+            <BsFillBellFill style={{ fontSize: "20px", color: "#474545" }} onClick={() => {
+              //TODO: A dialog box which will list out all notified messages
+
+              setNotify({length:0,messages:[]}) // Temporary
+            }
+          }/>
+          <Badge>{notify.length?notify.length:""}</Badge>
           </span>
           <span>
-            <Image
-              src="/avatar.jpg"
-              alt="userhere"
-              height={30}
-              width={30}
-              style={{ borderRadius: "50%" }}
-            />
+          <UserImage src={getCookie("user_avatar")} alt="profile" onClick={() => {
+            // user should show a dialog box with username and logout button 
+          }}/>
           </span>
         </div>
       </div>

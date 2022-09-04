@@ -81,7 +81,7 @@ const server = app.listen(Port,async() => {
 const io = new Server(server,{
     pingTimeout: 60000,
     cors: {
-        origin: "http://localhost:3000"
+        origin: "https://chit-chat-dun.vercel.app"
     }
 })
 

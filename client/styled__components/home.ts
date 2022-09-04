@@ -88,14 +88,19 @@ export const Hamburger = styled.div`
   }
 `;
 export const Badge = styled.sup`
-  color: ${error};
-  font-size: 12px;
-  font-weight: 500;
+  color: white;
+  font-size: 14px;
+  font-weight: bolder;
   position: absolute;
+  background-color:${error};
+  width:16px;
+  text-align: center;
+  justify-content:center;
   top: 0;
-  right: 0;
+  right: -5px;
   outline: none;
   border: none;
+  border-radius:50%;
 `;
 
 export const SearchBox = styled.div`
@@ -151,6 +156,7 @@ export const UserImage = styled.img`
   width: 30px;
   height: 30px;
   border-radius: 50%;
+  cursor:pointer;
 `;
 
 export const HomeClient = styled.div`
@@ -167,14 +173,23 @@ export const RightClient = styled.div`
 `;
 
 export const ChatList = styled.div`
-  width: 100%;
+  width: 95%;
+  margin: auto;
+  background-color: white;
+  border: "1px solid gray";
+  border-radius: 2px;
+  padding: 5px;
+
 `;
 
 export const MessageBox = styled.div`
   display: flex;
+  justify-content: space-between;
 `;
 export const UserDataBox = styled.div`
+  padding: 5px;
   display: flex;
+  justify-content: space-between;
 `;
 export const NoChatBox = styled.div`
   display: grid;
@@ -227,9 +242,11 @@ export const LiChatsBox = styled.li`
 export const ProfileBox = styled.div`
   width: 100%;
   display: flex;
+  padding: 10px;
   justify-content: space-between;
-  background-color: blue;
+  background-color: lightblue;
   height: 6vh;
+  align-items:center;
 `;
 export const SenderInputBox = styled.div`
   width: 100%;

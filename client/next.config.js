@@ -7,8 +7,8 @@ const nextConfig = {
     styledComponents: true,
   },
   images: {
-    path: "*",
-  },
+    path: '*'
+  }
 };
 
-module.exports = nextConfig;
+module.exports = nextConfig

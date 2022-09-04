@@ -79,11 +79,11 @@ const createGroupChat = (req, res) => __awaiter(void 0, void 0, void 0, function
     if (!req.body.users || !req.body.name) {
         return res.status(400).send({ message: "Please Fill all the feilds" });
     }
-    var users = JSON.parse(req.body.users);
+    var users = req.body.users;
     if (users.length < 2) {
         return res
             .status(400)
-            .send("More than 2 users are required to form a group chat");
+            .send({ message: "More than 2 users are required to form a group chat" });
     }
     users.push(req.body.user.user._id);
     try {
@@ -114,11 +114,10 @@ const renameGroup = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         .populate("users", "-password")
         .populate("groupAdmin", "-password");
     if (!updatedChat) {
-        res.status(404);
-        throw new Error("Chat Not Found");
+        return res.status(404).send({ message: "Something went wrong try again" });
     }
     else {
-        res.json(updatedChat);
+        return res.json(updatedChat);
     }
 });
 exports.renameGroup = renameGroup;

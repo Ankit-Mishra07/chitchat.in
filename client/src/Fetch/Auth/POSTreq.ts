@@ -66,6 +66,8 @@ export const loginReq = async (payload: LoginUser, router: NextRouter) => {
       if (res.token) {
         setCookie("chatuser", res.user._id);
         setCookie("token", res.token);
+        setCookie("username",res.user.username);
+        setCookie("user_avatar",res.user.profile_avatar_url)
         toast.success("Logged in successfully");
         router.push("/home");
       } else {

@@ -12,11 +12,11 @@ import { authenticateLogin } from "../middlewares";
 
 const router = express.Router();
 
-router.route("/").post(authenticateLogin, accessChat);
-router.route("/").get(authenticateLogin, fetchChats);
-router.route("/group").post(authenticateLogin, createGroupChat);
-router.route("/rename").put(authenticateLogin, renameGroup);
-router.route("/groupremove").put(authenticateLogin, removeFromGroup);
-router.route("/groupadd").put(authenticateLogin, addToGroup);
+router.post("/",authenticateLogin, accessChat);
+router.get("/",authenticateLogin, fetchChats);
+router.post("/group",authenticateLogin, createGroupChat);
+router.put("/rename",authenticateLogin, renameGroup);
+router.put("/groupremove",authenticateLogin, removeFromGroup);
+router.put("/groupadd",authenticateLogin, addToGroup);
 
 export default router;
